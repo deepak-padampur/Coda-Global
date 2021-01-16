@@ -10,7 +10,7 @@ const initState = {
 
 const rootReducer = (state = initState, action) => {
   switch (action.type) {
-    case 'FETCH_DATA':
+    case 'SET_USER_DATA':
       return {
         ...state,
         users: action.payload.users,

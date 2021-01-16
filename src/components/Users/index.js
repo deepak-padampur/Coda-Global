@@ -5,6 +5,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { setFetchedUserData } from '../../actions/userActions'
 import url from '../../config'
 
 const Users = () => {
@@ -15,13 +16,10 @@ const Users = () => {
     fetch(url)
       .then(res => res.json())
       .then(res => {
-        dispatch({
-          type: 'FETCH_DATA',
-          payload: {
-            users: res,
-            isLoading: false
-          }
-        })
+        dispatch(
+          setFetchedUserData(res)
+
+        )
       }).catch(err => {
         console.log(err)
       })
