@@ -3,26 +3,11 @@
  * @description this is the root reducer
  */
 
-const initState = {
-  users: [],
-  isLoading: true
-}
+import { userReducer } from './userReducer'
+import { combineReducers } from 'redux'
 
-const rootReducer = (state = initState, action) => {
-  switch (action.type) {
-    case 'SET_USER_DATA':
-      return {
-        ...state,
-        users: action.payload.users,
-        isLoading: action.payload.isLoading
-
-      }
-    default:
-      return state
-
-  }
-
-  return state;
-}
+const rootReducer = combineReducers({
+  userData: userReducer
+})
 
 export default rootReducer

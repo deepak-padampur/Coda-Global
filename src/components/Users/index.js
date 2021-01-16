@@ -5,20 +5,22 @@
 
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Row, Col, Input } from 'antd';
 import { setFetchedUserData } from '../../actions/userActions'
+import UsersTable from '../UsersTable'
 import url from '../../config'
 
 const Users = () => {
-  const users = useSelector(state => state)
+  const { users = [], isLoading } = useSelector(state => state.userData)
+  const [dataSource, setDataSource] = useState([])
+  const [searchQuery, setSearchQuery] = useState('')
   const dispatch = useDispatch()
-  console.log(users)
   useEffect(() => {
     fetch(url)
       .then(res => res.json())
       .then(res => {
         dispatch(
           setFetchedUserData(res)
-
         )
       }).catch(err => {
         console.log(err)
@@ -26,8 +28,68 @@ const Users = () => {
 
 
   }, [])
+  useEffect(() => {
+    if (users.length) {
+      const tempUserList = users.map(user => ({
+        key: user.Name,
+        ...user,
+        meta: `${user.Name} ${user.Price} ${user.Bet}`,
+      }))
+      setDataSource([...tempUserList])
+    }
+
+
+  }, [users])
+
+  const filterUsersFromSearchQuery = query => {
+    const tempUserList = users.map(user => ({
+      key: user.Name,
+      ...user,
+      meta: `${user.Name} ${user.Price} ${user.Bet}`,
+    }))
+    if (query.length === 0) {
+
+      setDataSource([...tempUserList])
+    }
+    if (query.length !== 0) {
+
+      setDataSource(
+        tempUserList.filter(user => user.meta.toLowerCase().includes(query.toLowerCase())),
+      )
+    }
+
+  }
+
+
   return (<>
-    <h1>User data will go here</h1>
+    <h1>Double or Nothing</h1>
+    <Row>
+      <Col span={18} push={6}>
+        <div className="card">
+          <div className="card-header px-1 px-md-2">
+            <Input.Search
+              placeholder="Search by Name"
+              size="large"
+              className="w-60 mb-2"
+              value={searchQuery}
+              onChange={e => {
+                setSearchQuery(e.target.value)
+                filterUsersFromSearchQuery(e.target.value)
+              }}
+            />
+
+          </div>
+          <div className="card-body">
+            <UsersTable dataSource={dataSource} />
+          </div>
+
+
+        </div>
+      </Col>
+      <Col span={6} pull={18}>
+        This is the selected user
+      </Col>
+    </Row>
 
   </>)
 }
