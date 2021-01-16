@@ -59,11 +59,13 @@ function UsersTable({ dataSource }) {
       key: 'Bet',
       title: 'Bet',
       dataIndex: 'Bet',
+      sorter: (a, b) => a.Bet - b.Bet,
     },
     {
       key: 'Price',
       title: 'Price',
       dataIndex: 'Price',
+      sorter: (a, b) => a.Price - b.Price,
     },
   ]
   return (
