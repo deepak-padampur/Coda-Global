@@ -5,9 +5,10 @@
 
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Row, Col, Input } from 'antd';
+import { Row, Col, Input, Card } from 'antd';
 import { setFetchedUserData } from '../../actions/userActions'
 import UsersTable from '../UsersTable'
+import SelectedUsers from '../SelectedUsers'
 import url from '../../config'
 
 const Users = () => {
@@ -65,7 +66,7 @@ const Users = () => {
     <h1>Double or Nothing</h1>
     <Row>
       <Col span={18} push={6}>
-        <div className="card">
+        <Card>
           <div className="card-header px-1 px-md-2">
             <Input.Search
               placeholder="Search by Name"
@@ -84,10 +85,10 @@ const Users = () => {
           </div>
 
 
-        </div>
+        </Card>
       </Col>
       <Col span={6} pull={18}>
-        This is the selected user
+        <SelectedUsers />
       </Col>
     </Row>
 

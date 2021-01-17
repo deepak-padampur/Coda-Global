@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
-import { Table, Checkbox } from 'antd'
+import { Table, Checkbox, Card, Spin } from 'antd'
 // import { Link, useLocation, useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -11,17 +11,28 @@ import { useSelector, useDispatch } from 'react-redux'
  */
 
 
+Array.prototype.remove = function () {
+  let what, a = arguments, L = a.length, ax;
+  while (L && this.length) {
+    what = a[--L];
+    while ((ax = this.indexOf(what)) !== -1) {
+      this.splice(ax, 1);
+    }
+  }
+  return this;
+};
+
+
 function UsersTable({ dataSource }) {
   const [name, setName] = useState([])
   const dispatch = useDispatch()
 
 
   useEffect(() => {
-
     dispatch({
       type: 'SET_SELECTED_DATA',
       payload: {
-        selectedUser: name
+        selectedUsers: name
       }
 
     })
@@ -35,7 +46,19 @@ function UsersTable({ dataSource }) {
       title: 'Select',
       dataIndex: 'Name',
       render: (Name) => (
-        <Checkbox onChange={e => setName([...name, Name])} />
+        <Checkbox onChange={e => {
+          if (e.target.checked) {
+            if (!name.includes(Name)) {
+              setName([...name, Name])
+            }
+          } else {
+            name.remove(Name)
+            setName([...name])
+
+          }
+        }}
+          checked={name.includes(Name)}
+        />
       )
 
     },
@@ -69,15 +92,17 @@ function UsersTable({ dataSource }) {
     },
   ]
   return (
-    <Table
-      scroll={{ x: false, y: false }}
-      columns={columns}
-      dataSource={dataSource}
-      pagination={{
-        pageSizeOptions: ['5', '10', '15', '20'],
-        showSizeChanger: true,
-      }}
-    />
+    <Card title="User List" bordered={false}>
+      {dataSource.length ? (<Table
+        scroll={{ x: false }}
+        columns={columns}
+        dataSource={dataSource}
+        pagination={{
+          pageSizeOptions: ['5', '10', '15', '20'],
+          showSizeChanger: true,
+        }}
+      />) : (<Spin />)}
+    </Card>
   )
 }
 

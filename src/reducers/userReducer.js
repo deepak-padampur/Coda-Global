@@ -6,7 +6,8 @@ import _ from 'lodash'
 const initState = {
   users: [],
   isLoading: true,
-  selectedUser: []
+  selectedUsers: [],
+  selectedUserData: []
 
 }
 
@@ -22,7 +23,12 @@ export const userReducer = (state = initState, action) => {
     case 'SET_SELECTED_DATA':
       return {
         ...state,
-        selectedUser: action.payload.selectedUser
+        selectedUsers: action.payload.selectedUsers
+      }
+    case 'SET_SELECTED_USER_DATA':
+      return {
+        ...state,
+        selectedUserData: action.payload.selectedUserData
       }
     default:
       return state
